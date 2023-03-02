@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from showtree.views import showtree
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('', showtree, name='showtree'),
 ]
