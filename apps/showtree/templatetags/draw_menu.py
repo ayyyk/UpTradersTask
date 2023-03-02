@@ -4,7 +4,12 @@ from showtree.models import Tree
 
 register = template.Library()
 
-@register.simple_tag
-def draw_menu(format_string):
-    menu = Tree.objects.filter()
-    return datetime.datetime.now().strftime(format_string)
+@register.inclusion_tag('showtree/menu.html', takes_context=True)
+def draw_menu(context, menu_name):
+    menu = Tree.objects.filter(tree_name=menu_name).values()
+    return {
+        'menu': menu,
+        'menupath': context['menupath'],
+        'level': context['level'],
+        'upmenu': context['upmenu']
+    }

@@ -6,13 +6,13 @@ def showtree(request, *args, **kwargs): #, action):
     menu = Tree.objects.all().values()
     if 'path' in kwargs:
         print(kwargs['path'])
-        mehupath = '/' + kwargs['path']
+        menupath = '/' + kwargs['path']
         tmp = kwargs['path'].split('/')
         top = len(tmp) - 1
         upmenu = ''.join(tmp[:-1])
         print(upmenu)
     else:
-        mehupath = ''
+        menupath = '/'
         top = -1
         upmenu = ''
     return render(
@@ -20,7 +20,7 @@ def showtree(request, *args, **kwargs): #, action):
         'showtree/index.html', 
         {
             'menu': menu,
-            'mehupath': mehupath,
+            'menupath': menupath,
             'level': top,
             'upmenu': upmenu
         }
