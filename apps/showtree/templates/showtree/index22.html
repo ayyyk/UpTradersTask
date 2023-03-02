@@ -1,0 +1,49 @@
+{% load static %}
+
+{% load draw_menu %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style type="text/css">
+		body{
+			margin-left: 100px;
+			margin-top: 100px;
+		}
+		.menubox{
+			margin-top: 30px;
+			font-size: 1.2rem;
+			white-space: 200px;
+		}
+	</style>
+	<title></title>
+</head>
+<body>
+	 <h1>Тестовое задание для UpTraders</h1>
+	 <a href="/admin/">Админка</a> (user, 123456)
+
+	 <div class="menubox">
+		{% for elem in menu %} 	
+		{% if elem.full_name < mehupath %}
+			<div style="margin-left: {{elem.offset}}px; color: green;">
+				{{elem.name}} {#{elem.offset}#}
+			</div>
+		{% elif elem.full_name == mehupath or mehupath in elem.full_name %}
+			{% if elem.level <= level|add:1 %}
+			<div style="margin-left: {{elem.offset}}px; color: red;">
+				{{elem.name}} {#{elem.offset}#}
+			</div>
+			{% endif %}
+		{% else %}
+			{% if elem.level == 0 or upmenu in elem.full_name and elem.level <= level %}
+			<div style="margin-left: {{elem.offset}}px; color: gold;">
+				{{elem.name}} {#{elem.offset}#}
+			</div>
+			{% endif %}
+		{% endif %}
+		{% endfor %}
+	 </div>
+</body>
+</html>
