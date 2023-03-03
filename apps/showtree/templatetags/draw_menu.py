@@ -6,7 +6,8 @@ register = template.Library()
 
 @register.inclusion_tag('showtree/menu.html', takes_context=True)
 def draw_menu(context, menu_name):
-    menu = Tree.objects.filter(tree_name=menu_name).values()
+    menu = Tree.objects.filter(
+        menu__name=menu_name).order_by('full_name').values()
     return {
         'menu': menu,
         'menupath': context['menupath'],

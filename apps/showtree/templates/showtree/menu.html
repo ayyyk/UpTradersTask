@@ -1,22 +1,27 @@
 {% load static %}
 
-
 	<div class="menubox">
 	{% for elem in menu %} 	
 	{% if elem.full_name < menupath %}
-		<div style="margin-left: {{elem.offset}}px; color: green;">
-			{{elem.name}} {#{elem.offset}#}
+		<div style="margin-left: {{elem.offset}}px;">
+			<a style="color: green;" href="{{elem.full_name}}">
+				{{elem.name}}
+			</a>
 		</div>
 	{% elif elem.full_name == menupath or menupath in elem.full_name %}
 		{% if elem.level <= level|add:1 %}
-		<div style="margin-left: {{elem.offset}}px; color: red;">
-			{{elem.name}} {#{elem.offset}#}
+		<div style="margin-left: {{elem.offset}}px;">
+			<a style="color: red;" href="{{elem.full_name}}">
+				{{elem.name}} 
+			</a>
 		</div>
 		{% endif %}
 	{% else %}
 		{% if elem.level == 0 or upmenu in elem.full_name and elem.level <= level %}
-		<div style="margin-left: {{elem.offset}}px; color: gold;">
-			{{elem.name}} {#{elem.offset}#}
+		<div style="margin-left: {{elem.offset}}px;">
+			<a style="color: gold;" href="{{elem.full_name}}">
+				{{elem.name}} 
+			</a>
 		</div>
 		{% endif %}
 	{% endif %}
