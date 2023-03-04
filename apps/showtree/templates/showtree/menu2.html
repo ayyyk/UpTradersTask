@@ -1,0 +1,14 @@
+{% load static %}
+{% load draw_menu2 %}
+{% load drawing %}
+
+	<div class="menubox">
+	{% for elem in menu %} 	
+		<div style="margin-left: {{elem.elem.offset}}px;">
+			{{elem.elem.name}}
+			{% if elem.childs %}
+				{% drawing elem.childs %}
+			{% endif %}
+		</div>
+	{% endfor %}
+	</div>

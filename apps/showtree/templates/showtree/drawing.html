@@ -1,0 +1,13 @@
+{% load static %}
+{% load draw_menu %}
+{% load drawing %}
+	
+	{% for elem in elems %} 	
+	<div style="margin-left: {{elem.offset}}px;">
+		{{elem.elem.name}}
+		{% if elem.childs %}
+			{% drawing elem.childs %}
+		{% endif %}
+	</div>
+	{% endfor %}
+	
