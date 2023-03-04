@@ -3,8 +3,8 @@ from django.contrib import admin
 from .models import Tree, Menu
 
 class TreeAdmin(admin.ModelAdmin):
-    list_display = ('id','tree_name', 'menu', 'parent', 'name', 'full_name', 'up_elem')
-    list_display_links = ('tree_name',)
+    list_display = ('id', 'menu', 'parent', 'name', 'full_name', 'up_elem')
+    list_display_links = ('id',)
     #readonly_fields = ('tree', 'link',)
     list_editable = ('name', 'full_name', 'menu', 'parent' )
     # search_fields = ('user',)

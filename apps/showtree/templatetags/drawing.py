@@ -5,7 +5,7 @@ from showtree.models import Tree, Menu
 
 register = template.Library()
 
-@register.inclusion_tag('showtree/drawing.html') #, takes_context=True)
+@register.inclusion_tag('showtree/drawing.html')
 def drawing(elems):
     return {
         'elems': elems

@@ -11,7 +11,6 @@ class Menu(models.Model):
 
 
 class Tree(models.Model):
-    tree_name = models.CharField(max_length=50)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', 
                                 on_delete=models.CASCADE,

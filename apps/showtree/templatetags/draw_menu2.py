@@ -18,6 +18,28 @@ def draw_menu2(context, menu_name):
     i = 0
     deepTree = []
     dictId = dict()
+
+    menupath = context['menupath']
+    print(menupath)
+    menupath = menupath[1:] if menupath[0]=='/' else menupath
+    tmp = menupath.split('/')
+    pathElements = tmp[1:] if tmp[0]=='' else tmp
+
+    isRight = False
+    selectedElem = None
+    def isOpenedChilds(selEl, item, pr):
+        if selEl is not None:
+            print('selEl is not None')
+            print(len(pr['vector']), len(selEl['vector']))
+            if len(pr['vector'])+1 > len(selEl['vector']):
+                prVector = pr['vector']
+                selElVector = selEl['vector']
+                print(f'{len(prVector)+1} > {len(selElVector)}')
+                if all(selEl['vector'][i]==pr['vector'][i] 
+                        for i in range(len(selEl['vector']))):
+                    return False
+        return True
+
     for item in menu:
         try:
             pr = dictId[item['parent_id']]
@@ -31,54 +53,37 @@ def draw_menu2(context, menu_name):
                 'offset': 0,
             })
             dictId[item['id']] = deepTree[-1]
+            if item['name']==pathElements[0]: 
+                isRight = True
+                if len(pathElements)==1:
+                    selectedElem = deepTree[-1]
         else:
-            try:
-                seat = pr['childs']
-            except KeyError:
-                seat = pr['childs'] = []
-            seat.append({
-                'elem': item,
-                'num': len(seat),
-                'path': pr['path'] + '/' + item['name'] ,
-                'level': pr['level'] + 1,
-                'vector': pr['vector'] + [len(seat)],
-                'offset': (pr['level'] + 1) * 20,
-            })
-            dictId[item['id']] = seat[-1]
+            if not isRight: break
+            if isOpenedChilds(selectedElem, item, pr):
+                try:
+                    seat = pr['childs']
+                except KeyError:
+                    seat = pr['childs'] = []
 
+                lenSeat = len(seat)
+                level = pr['level'] + 1
+                seat.append({
+                    'elem': item,
+                    'num': lenSeat, #len(seat),
+                    'path': pr['path'] + '/' + item['name'] ,
+                    'level': level, #pr['level'] + 1,
+                    'vector': pr['vector'] + [lenSeat], #[len(seat)],
+                    'offset': level * 20, #(pr['level'] + 1) * 20,
+                })
+                dictId[item['id']] = seat[-1]
+                print(menupath, seat[-1]['path'])
+                if menupath==seat[-1]['path']:
+                    selectedElem = seat[-1]
+
+    
     return {
         'menu': deepTree,
-        'menupath': context['menupath'],
+        'menupath': menupath,
         'level': context['level'],
         'upmenu': context['upmenu']
     }
-
-
-    # while menu[i]['parent_id'] is None:
-    #     deepTree.append({
-    #         'elem': menu[i],
-    #         'num': i,
-    #         'path': menu[i]['name'],
-    #         'level': 0,
-    #         'vector': [i],
-    #         'offset': 0,
-    #     })
-    #     dictId[menu[i]['id']] = deepTree[-1]
-    #     i += 1
-
-    # for k in range(i, len(menu)):
-    #     pr = dictId[menu[k]['parent_id']]
-    #     try:
-    #         seat = pr['childs']
-    #     except KeyError:
-    #         seat = pr['childs'] = []
-    #     seat.append({
-    #         'elem': menu[k],
-    #         'num': len(seat),
-    #         'path': pr['path'] + '/' + menu[k]['name'] ,
-    #         'level': pr['level'] + 1,
-    #         'vector': pr['vector'] + [len(seat)],
-    #         'offset': (pr['level'] + 1) * 20,
-    #     })
-
-    #     dictId[menu[k]['id']] = seat[-1]

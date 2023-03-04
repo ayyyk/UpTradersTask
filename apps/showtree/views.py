@@ -3,6 +3,7 @@ from django.shortcuts import render
 from .models import Tree
 
 def showtree(request, *args, **kwargs):
+    print(kwargs['path'])
     try:
         menupath = '/' + kwargs['path']
     except KeyError:
