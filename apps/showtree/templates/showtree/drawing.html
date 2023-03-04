@@ -4,7 +4,13 @@
 	
 	{% for elem in elems %} 	
 	<div style="margin-left: {{elem.offset}}px;">
-		{{elem.elem.name}}
+		{% if elem.selected %}
+		<a style="color: red;" href="{{elem.elem.full_name}}">
+		{% else %}
+		<a style="color: black;" href="{{elem.elem.full_name}}">
+		{% endif %}	
+			{{elem.elem.name}}
+		</a>
 		{% if elem.childs %}
 			{% drawing elem.childs %}
 		{% endif %}
