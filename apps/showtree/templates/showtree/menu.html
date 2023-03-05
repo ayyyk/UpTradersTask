@@ -1,35 +1,19 @@
 {% load static %}
-{% load draw_menu %}
+{% load drawing %}
 
 	<div class="menubox">
-		<div >
-			<a style="color: green;" href="/">
-				root
-			</a>
-		</div>
 	{% for elem in menu %} 	
-	{% if elem.full_name < menupath %}
-		<div style="margin-left: {{elem.full_name|offset}}px;">
-			<a style="color: green;" href="{{elem.full_name}}">
-				{{elem.name}}
+		<div style="margin-left: {{elem.elem.offset}}px;">
+			{% if elem.selected %}
+			<a style="color: red;" href="{{elem.elem.link}}">
+			{% else %}
+			<a style="color: black;" href="{{elem.elem.link}}">
+			{% endif %}	
+				{{elem.elem.name}}
 			</a>
+			{% if elem.childs %}
+				{% drawing elem.childs %}
+			{% endif %}
 		</div>
-	{% elif elem.full_name == menupath or menupath in elem.full_name %}
-		{% if elem.full_name|level <= level|add:1 %}
-		<div style="margin-left: {{elem.full_name|offset}}px;">
-			<a style="color: red;" href="{{elem.full_name}}">
-				{{elem.name}} 
-			</a>
-		</div>
-		{% endif %}
-	{% else %}
-		{% if elem.full_name|level == 0 or upmenu in elem.full_name and elem.full_name|level <= level %}
-		<div style="margin-left: {{elem.full_name|offset}}px;">
-			<a style="color: gold;" href="{{elem.full_name}}">
-				{{elem.name}} 
-			</a>
-		</div>
-		{% endif %}
-	{% endif %}
 	{% endfor %}
 	</div>

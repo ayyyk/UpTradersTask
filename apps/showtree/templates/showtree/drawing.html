@@ -1,13 +1,12 @@
 {% load static %}
-{% load draw_menu %}
 {% load drawing %}
 	
 	{% for elem in elems %} 	
 	<div style="margin-left: {{elem.offset}}px;">
 		{% if elem.selected %}
-		<a style="color: red;" href="{{elem.elem.full_name}}">
+		<a style="color: red;" href="{{elem.elem.link}}">
 		{% else %}
-		<a style="color: black;" href="{{elem.elem.full_name}}">
+		<a style="color: black;" href="{{elem.elem.link}}">
 		{% endif %}	
 			{{elem.elem.name}}
 		</a>
@@ -16,4 +15,3 @@
 		{% endif %}
 	</div>
 	{% endfor %}
-	

@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 class Menu(models.Model):
     name = models.CharField(max_length=50)
@@ -17,13 +18,15 @@ class Tree(models.Model):
                                 blank=True, null=True,
                                 related_name='childs')
     name = models.CharField(max_length=50)
-    full_name = models.CharField(max_length=1000)
-    up_elem = models.PositiveBigIntegerField(blank=True, null=True)
+    link = models.CharField(max_length=2048)
 
     class Meta:
-        ordering=['parent_id', 'name']
+        ordering=['-menu', 'parent_id', 'name']
 
     def __str__(self):
         return f'{self.name} ({self.id})'
+
+    # def get_absolute_url(self, pk):
+    #     return reverse(self.url)
 
 
