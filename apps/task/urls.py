@@ -26,8 +26,9 @@ urlpatterns = [
 
 
     #it is examples for named_url handling
-    path('one', showtree, name='one'),
-    path('one/', showtree, name='two'),
-    path('one/one-two', showtree, name='one-two'),
+
+    #path('one', showtree, name='one'),
+    #path('one', showtree, name='two'),
+    path('one/one-two/tree/four', showtree, name='one-two-go'),
 
 ]

@@ -1,5 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+
 
 class Menu(models.Model):
     name = models.CharField(max_length=50)
@@ -22,10 +24,21 @@ class Tree(models.Model):
     named_url = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
-        ordering=['-menu', 'parent_id', 'name']
+        ordering=['menu', 'parent_id', 'name']
+
+    def clean(self):
+        if self.named_url and self.url:
+            raise ValidationError(
+                'One of that fields must be blank (url, named_url)')
+
+        if self.url:
+            while self.url.startswith('/'):
+                self.url = self.url[1:]
+
+        if self.url:
+            while self.url.endswith('/'):
+                self.url = self.url[:-1]
 
     def __str__(self):
         return f'{self.name} ({self.id})'
-
-
     
