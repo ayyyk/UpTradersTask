@@ -18,7 +18,8 @@ class Tree(models.Model):
                                 blank=True, null=True,
                                 related_name='childs')
     name = models.CharField(max_length=50)
-    link = models.CharField(max_length=2048)
+    url = models.CharField(max_length=2048, blank=True, null=True)
+    named_url = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         ordering=['-menu', 'parent_id', 'name']
@@ -26,7 +27,5 @@ class Tree(models.Model):
     def __str__(self):
         return f'{self.name} ({self.id})'
 
-    # def get_absolute_url(self, pk):
-    #     return reverse(self.url)
 
-
+    

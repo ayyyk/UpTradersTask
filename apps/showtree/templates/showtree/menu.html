@@ -1,19 +1,29 @@
 {% load static %}
 {% load drawing %}
 
-	<div class="menubox">
-	{% for elem in menu %} 	
-		<div style="margin-left: {{elem.elem.offset}}px;">
-			{% if elem.selected %}
-			<a style="color: red;" href="{{elem.elem.link}}">
+	{% for child in childs %} 	
+	<div style="margin-left: 20px;">
+			{% if child.elem.url and child.elem.url|isInnerPath %}
+				<a style="color: {{child|isSelected}}" href="{% url 'menu' path=child.elem.url %}">
+					{{child.elem.name}}
+				</a>
+			{% elif child.elem.url and not child.elem.url|isInnerPath %}
+				<a style="color: {{child|isSelected}}" href="child.elem.url">
+					{{child.elem.name}}
+				</a>
+			{% elif child.elem.named_url %}
+				<a style="color: {{child|isSelected}}" href="{% url child.elem.named_url %}">
+					{{child.elem.name}}
+				</a>
 			{% else %}
-			<a style="color: black;" href="{{elem.elem.link}}">
+				<div style="color: {{child|isSelected}}">
+					{{child.elem.name}}
+				</div>
 			{% endif %}	
-				{{elem.elem.name}}
-			</a>
-			{% if elem.childs %}
-				{% drawing elem.childs %}
+						
+			{% if child.childs %}
+				{% drawing child.childs %}
 			{% endif %}
-		</div>
-	{% endfor %}
 	</div>
+	{% endfor %}
+	

@@ -11,8 +11,8 @@ class BottomItem(admin.TabularInline):
 class TreeAdmin(admin.ModelAdmin):
     # settings for common displaing
     #empty_value_display = '-empty-'
-    list_display = ('id', 'name', 'link', 'menu', 'parent')
-    list_display_links = ('id', 'name', 'link')
+    list_display = ('id', 'name', 'url', 'named_url', 'menu', 'parent')
+    list_display_links = ('id', 'name', 'url', 'named_url')
     
     #list_editable = ('name', 'link', 'menu', 'parent' )
     #search_fields = ('menu',)

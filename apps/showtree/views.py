@@ -1,25 +1,24 @@
+from urllib.parse import urlparse
+
 from django.shortcuts import render
 
-from .models import Tree
+#from .models import Tree
 
-def showtree(request, *args, **kwargs):
-    try:
-        menupath = '/' + kwargs['path']
-    except KeyError:
-        menupath = '/'
-        top = -1
-        upmenu = ''
-    else:
-        tmp = kwargs['path'].split('/')
-        top = len(tmp) - 1
-        upmenu = ''.join(tmp[:-1])
+def showtree(request, path='/', *args, **kwargs):
+    # parsResult = urlparse(path)
+    # print('*********************************')
+    # print(path)
+    # print(parsResult)
 
-    return render(
-        request, 
-        'showtree/index.html', 
-        {
-            'menupath': menupath,
-            'level': top,
-            'upmenu': upmenu
-        }
-    )
+    # try:
+    #     menupath = path[1:] if path.startswith('//') else path
+    # except KeyError:
+    #     menupath = '/'
+    # else:
+    #     tmp = path.split('/')
+
+    # menupath = path[1:] if path.startswith('//') else path
+    # menupath = path[1:] if path.startswith('/') else path
+
+
+    return render(request, 'showtree/index.html', {'menupath': path})

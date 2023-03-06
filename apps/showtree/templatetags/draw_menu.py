@@ -1,3 +1,6 @@
+from functools import reduce
+from urllib.parse import urlparse
+
 from django import template
 
 from showtree.models import Tree, Menu
@@ -11,79 +14,80 @@ def draw_menu(context, menu_name):
     menu = Tree.objects.filter(
        menu__name=menu_name).order_by('parent_id', 'name').values()
 
-    deepTree = []; dictId = dict(); badIds = set()
+    deepTree = []; allIds = dict(); 
 
     menupath = context['menupath']
     menupath = menupath[1:] if menupath[0]=='/' else menupath
-    tmp = menupath.split('/')
-    pathElements = tmp[1:] if tmp[0]=='' else tmp
-
+    pathElements = menupath.split('/')
+    while not len(pathElements):
+        pathElements = pathElements[1:]
+    
     isRight = False
     selectedElem = None
-    def isOpenedChilds(selEl, item, pr):
-        if selEl is None: return True
 
-        selElVector = selEl['vector']
-        try:
-            itemVector = pr['vector'] + [len(pr['childs'])]
-        except KeyError:
-            itemVector = pr['vector'] + [0]
+    allIds = {elem['id']:elem  for elem in menu}
 
-        if (itemVector[:len(selElVector)]==selElVector and 
-                len(itemVector)>len(selElVector)+1):
-            return False
-        return True
+    # add top elemente in the tree-like menu
+    index = 0
+    while (item:=menu[index])['parent_id']==None:
+        deepTree.append({
+            'elem': item,
+            'path': item['name'],
+            'vector': [len(deepTree)],
+        })
+        del allIds[item['id']]
+        if pathElements and item['name']==pathElements[0]:
+            isRight = True
+            if len(pathElements)==1:
+                selectedElem = deepTree[-1]
+                selectedElem['selected'] = True
+        index += 1
 
-    #print(f'\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-    for item in menu:
-        #print(f'\n+++++++++++++++++++++++++++++++++++++')
-        #print(f'{item=}')
-        try:
-            pr = dictId[item['parent_id']]
-        except KeyError:
-            if item['parent_id'] in badIds:
-                badIds.add(item['id'])
+    # add pther menu elements in its places
+    if isRight:
+        currPath = [0]
+        while len(allIds):
+            try:
+                treeElem = reduce(lambda mas, next: mas['childs'][next],
+                    currPath, {'childs':deepTree})
+            except IndexError:
+                currPath.pop()
+                currPath[-1] += 1
             else:
-                #print('except KeyError:')
-                deepTree.append({
-                    'elem': item,
-                    'path': item['name'],
-                    'vector': [len(deepTree)],
-                    'offset': 0,
-                })
-                dictId[item['id']] = deepTree[-1]
-
-                if pathElements and item['name']==pathElements[0]:
-                    isRight = True
-                    if len(pathElements)==1:
-                        selectedElem = deepTree[-1]
-                        selectedElem['selected'] = True
-                #print(f'{selectedElem=}')
-                #print(dictId.keys())
-        else:
-            if not isRight: break
-            #print(f'11{selectedElem=}')
-            if isOpenedChilds(selectedElem, item, pr):
-                try:
-                    seat = pr['childs']
-                except KeyError:
-                    seat = pr['childs'] = []
-
-                seat.append({
-                    'elem': item,
-                    'path': pr['path'] + '/' + item['name'],
-                    'vector': pr['vector'] + [len(seat)],
-                    'offset': pr['offset'] + 20, 
-                })
-                dictId[item['id']] = seat[-1]
-                #print(menupath, seat[-1]['path'])
-                if menupath==seat[-1]['path']:
-                    selectedElem = seat[-1]
-                    selectedElem['selected'] = True
-            else:
-                badIds.add(item['id'])
+                childs = []
+                for item in allIds:
+                    if allIds[item]['parent_id']==treeElem['elem']['id']:
+                        childs.append(allIds[item])
+                if childs:
+                    for elem in childs:
+                        del allIds[elem['id']]
+                    treeElem['childs'] = []
+                    for i, child in enumerate(childs):
+                        treeElem['childs'].append({
+                            'elem': child,
+                            'path': treeElem['path'] + '/' + child['name'],
+                            'vector': currPath + [i],
+                        })
+                        if (not selectedElem 
+                                and treeElem['childs'][-1]['path']==menupath):
+                            selectedElem = treeElem['childs'][-1]
+                            selectedElem['selected'] = True
+                    currPath = currPath + [0]
+                else:
+                    currPath[-1] += 1
 
     if selectedElem is not None:
+        try:
+            childs = selectedElem['childs']
+        except KeyError:
+            pass
+        else:
+            for child in childs:
+                try:
+                    del child['childs']
+                except KeyError:
+                    pass
+
         childs = deepTree
         for elem in selectedElem['vector']:
             for index in range(elem+1, len(childs)):
@@ -102,4 +106,6 @@ def draw_menu(context, menu_name):
             except KeyError:
                 pass
 
-    return {'menu': deepTree}
+    return {
+        'childs': deepTree,
+    }

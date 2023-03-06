@@ -1,5 +1,4 @@
 {% load static %}
-
 {% load draw_menu %}
 
 
@@ -15,20 +14,32 @@
 		}
 		.menubox{
 			margin-top: 30px;
+			margin-left: 100px;
 			font-size: 1.2rem;
 			white-space: 200px;
-		}
-		.menu a{
-
+			display: inline-block;
+			width: 300px;
+			border: 1px;
+			vertical-align: top;
 		}
 	</style>
 	<title></title>
 </head>
 <body>
-	 <h1>Тестовое задание для UpTraders</h1>
-	 <a href="/admin/">Админка</a> (user, 123456)
+	<div class="allmenu">
+		<h1>Тестовое задание для UpTraders</h1>
+		<a href="/admin/">Админка</a> (user, 123456) <br>
+		<div class="menubox">
+			{% draw_menu 'main_menu' %}
+		</div>
 
-	 {% draw_menu 'main_menu' %}
-	 
+		<div class="menubox">
+			{% draw_menu 'custom' %}
+		</div>
+
+		<div class="menubox">
+			{% draw_menu 'main_menu' %}
+		</div>
+	</div>
 </body>
 </html>
