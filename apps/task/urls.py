@@ -21,6 +21,13 @@ from showtree.views import showtree
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('<path:path>/', showtree, name='showtree'),
-    path('', showtree, name='showtree'),
+    path('<path:path>/', showtree, name='menu'),
+    path('', showtree, name='showtree2'),
+
+
+    #it is examples for named_url handling
+    path('one', showtree, name='one'),
+    path('one/', showtree, name='two'),
+    path('one/one-two', showtree, name='one-two'),
+
 ]

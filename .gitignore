@@ -1,8 +1,5 @@
-package-lock.json
-
-
-
 .gitignore.bak
 
 *.bak
 
+*.pyc

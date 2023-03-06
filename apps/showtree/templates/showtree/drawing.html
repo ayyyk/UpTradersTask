@@ -1,0 +1,25 @@
+{% load static %}
+{% load drawing %}
+	
+	{% for child in childs %} 	
+	<div style="margin-left: {{child.offset}}px;">
+		{% if child.elem.url %}
+			{% if child.selected %}
+				<a style="color: red;" href="{% url 'menu' path=child.elem.url %}">
+			{% else %}
+				<a style="color: black;" href="{% url 'menu' path=child.elem.url %}">
+			{% endif %}	
+		{% elif child.elem.named_url %}
+			{% if child.selected %}
+				<a style="color: red;" href="{% url child.elem.named_url %}">
+			{% else %}
+				<a style="color: black;" href="{% url child.elem.named_url %}">
+			{% endif %}	
+		{% endif %}	
+					{{child.elem.name}}
+				</a>
+		{% if child.childs %}
+			{% drawing child.childs %}
+		{% endif %}
+	</div>
+	{% endfor %}

@@ -1,24 +1,29 @@
 {% load static %}
+{% load drawing %}
 
-
-	<div class="menubox">
-	{% for elem in menu %} 	
-	{% if elem.full_name < menupath %}
-		<div style="margin-left: {{elem.offset}}px; color: green;">
-			{{elem.name}} {#{elem.offset}#}
-		</div>
-	{% elif elem.full_name == menupath or menupath in elem.full_name %}
-		{% if elem.level <= level|add:1 %}
-		<div style="margin-left: {{elem.offset}}px; color: red;">
-			{{elem.name}} {#{elem.offset}#}
-		</div>
-		{% endif %}
-	{% else %}
-		{% if elem.level == 0 or upmenu in elem.full_name and elem.level <= level %}
-		<div style="margin-left: {{elem.offset}}px; color: gold;">
-			{{elem.name}} {#{elem.offset}#}
-		</div>
-		{% endif %}
-	{% endif %}
-	{% endfor %}
+	{% for child in childs %} 	
+	<div style="margin-left: 20px;">
+			{% if child.elem.url and child.elem.url|isInnerPath %}
+				<a style="color: {{child|isSelected}}" href="{% url 'menu' path=child.elem.url %}">
+					{{child.elem.name}}
+				</a>
+			{% elif child.elem.url and not child.elem.url|isInnerPath %}
+				<a style="color: {{child|isSelected}}" href="child.elem.url">
+					{{child.elem.name}}
+				</a>
+			{% elif child.elem.named_url %}
+				<a style="color: {{child|isSelected}}" href="{% url child.elem.named_url %}">
+					{{child.elem.name}}
+				</a>
+			{% else %}
+				<div style="color: {{child|isSelected}}">
+					{{child.elem.name}}
+				</div>
+			{% endif %}	
+						
+			{% if child.childs %}
+				{% drawing child.childs %}
+			{% endif %}
 	</div>
+	{% endfor %}
+	
