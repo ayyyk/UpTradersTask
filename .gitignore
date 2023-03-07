@@ -3,3 +3,7 @@
 *.bak
 
 *.pyc
+
+run.bat
+
+task.bat
