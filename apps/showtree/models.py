@@ -27,18 +27,14 @@ class Tree(models.Model):
         ordering=['menu', 'parent_id', 'name']
 
     def clean(self):
-        if self.named_url and self.url:
-            raise ValidationError(
-                'One of that fields must be blank (url, named_url)')
-
         if self.url:
+            if self.named_url:
+                raise ValidationError(
+                    'One of that fields must be blank (url, named_url)')
             while self.url.startswith('/'):
                 self.url = self.url[1:]
-
-        if self.url:
             while self.url.endswith('/'):
                 self.url = self.url[:-1]
 
     def __str__(self):
         return f'{self.name} ({self.id})'
-    

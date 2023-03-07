@@ -25,10 +25,11 @@ urlpatterns = [
     path('', showtree, name='showtree2'),
 
 
-    #it is examples for named_url handling
+    #this is examples of named_url handling
 
-    #path('one', showtree, name='one'),
-    #path('one', showtree, name='two'),
-    path('one/one-two/tree/four', showtree, name='one-two-go'),
+    path('Бразилия/', showtree, name='bras'),
+    path('Китай', showtree, name='kit'),
+    path('Россия', showtree, name='rus'),
+    path('Япония', showtree, name='yap'),
 
 ]

@@ -14,6 +14,7 @@ def draw_menu(context, menu_name):
     menu = Tree.objects.filter(
        menu__name=menu_name).order_by('parent_id', 'name').values()
 
+
     if not len(menu):
         return {'childs': []}
 

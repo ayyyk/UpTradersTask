@@ -1,12 +1,10 @@
 {% load static %}
 {% load drawing %}
 
-	{#% url 'menu' child.elem.url|getUrl %#}
-
 	{% for child in childs %} 	
 	<div style="margin-left: 20px;">
 			{% if child.elem.url and child.elem.url|isInnerPath %}
-				<a style="color: {{child|isSelected}}" href="{% url 'menu' child.elem.url %}">
+				<a style="color: {{child|isSelected}}" href="{% url 'menu' child.elem.url %}"> {#% url 'menu' child.elem.url|getUrl %#}
 					{{child.elem.name}}
 				</a>
 			{% elif child.elem.url and not child.elem.url|isInnerPath %}
