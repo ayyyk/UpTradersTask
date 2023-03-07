@@ -14,7 +14,12 @@ def draw_menu(context, menu_name):
     menu = Tree.objects.filter(
        menu__name=menu_name).order_by('parent_id', 'name').values()
 
-    deepTree = []; allIds = dict(); 
+
+    if not len(menu):
+        return {'childs': []}
+
+    deepTree = []; 
+    allIds = dict();
 
     menupath = context['menupath']
     menupath = menupath[1:] if menupath[0]=='/' else menupath
@@ -25,9 +30,8 @@ def draw_menu(context, menu_name):
     isRight = False
     selectedElem = None
 
-    allIds = {elem['id']:elem  for elem in menu}
+    allIds = {elem['id']:elem for elem in menu}
 
-    # add top elemente in the tree-like menu
     index = 0
     while (item:=menu[index])['parent_id']==None:
         deepTree.append({
@@ -43,7 +47,6 @@ def draw_menu(context, menu_name):
                 selectedElem['selected'] = True
         index += 1
 
-    # add pther menu elements in its places
     if isRight:
         currPath = [0]
         while len(allIds):
